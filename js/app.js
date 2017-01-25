@@ -103,6 +103,11 @@ function playerMove(board, direction) {
         board[player + MOVES[direction]] = PLAYER;
         PLAYER.health += HEALTH.health;
     }
+    if (board[player + MOVES[direction]] == WEAPON) {
+        board[player] = EMPTY;
+        board[player + MOVES[direction]] = PLAYER;
+        PLAYER.demage += WEAPON.demage;
+    }
     return board;
 }
 
