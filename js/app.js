@@ -108,6 +108,16 @@ function playerMove(board, direction) {
         board[player + MOVES[direction]] = PLAYER;
         PLAYER.demage += WEAPON.demage;
     }
+    if (board[player + MOVES[direction]] == ENEMY) {
+        var currentEnemy = ENEMY;
+        PLAYER.health -= currentEnemy.demage;
+        currentEnemy.health -= PLAYER.demage;
+        if (currentEnemy.health <= 0) {
+            board[player] = EMPTY;
+            ENEMY.health = 100;
+            board[player + MOVES[direction]] = PLAYER;
+        }
+    }
     return board;
 }
 
