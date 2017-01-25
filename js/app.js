@@ -72,7 +72,7 @@ function newBoard() {
     setEntyty(ENEMY, 10);
     setEntyty(PLAYER, 1);
     setEntyty(BOSS, 1);
-    setEntyty(HEALTH, 10);
+    setEntyty(HEALTH, 20);
     setEntyty(WEAPON, 10);
     setEntyty(WALL, 500);
     setEntyty(PORTAL, 3);
@@ -98,19 +98,26 @@ function playerMove(board, direction) {
             }
         }
     }
+    if (board[player + MOVES[direction]] == HEALTH) {
+        board[player] = EMPTY;
+        board[player + MOVES[direction]] = PLAYER;
+        PLAYER.health += HEALTH.health;
+    }
     return board;
 }
 
 var Board = React.createClass({
     getInitialState: function () {
         return {
-            board: newBoard()
+            board: newBoard(),
+            player: PLAYER
         }
     },
     move: function (e) {
         var newBoard = playerMove(this.state.board, e.code)
         this.setState({
-            board: newBoard
+            board: newBoard,
+            player: PLAYER
         })
 
     },
@@ -142,6 +149,12 @@ var Board = React.createClass({
     render: function () {
         window.addEventListener("keydown", this.move);
         return (<div>
+                <div className='playerInfo'>
+                    <div>Health: {this.state.player.health}</div>
+                    <div>Experience: {this.state.player.exp}</div>
+                    <div>Level: {this.state.player.level}</div>
+                    <div>Weapon: {this.state.player.demage}</div>
+                </div>
                 <div className='grid'>
                     {this.getField()}
                 </div>
