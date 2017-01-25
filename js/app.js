@@ -36,6 +36,12 @@ var WEAPON = {
 var PORTAL = {
     name: 'portal'
 };
+var MOVES = {
+    'ArrowUp': -100,
+    'ArrowDown': 100,
+    'ArrowLeft': -1,
+    'ArrowRight': 1
+};
 
 function emptyBoard() {
     var board = [];
@@ -73,7 +79,15 @@ function newBoard() {
 
     return board;
 }
-console.log(newBoard());
+
+function playerMove(board, direction) {
+    var player = board.indexOf(PLAYER);
+    console.log(player);
+    board[player] = EMPTY;
+    board[player + MOVES[direction]] = PLAYER;
+    console.log(player + MOVES[direction]);
+    return board;
+}
 
 var Board = React.createClass({
     getInitialState: function () {
@@ -81,17 +95,32 @@ var Board = React.createClass({
             board: newBoard()
         }
     },
+    move: function (e) {
+        var newBoard = playerMove(this.state.board, e.code)
+        this.setState({
+            board: newBoard
+        })
+
+    },
     getField: function () {
         var same = this;
+        window.onKeyPress = this.move;
         const cellStyle = {
             clear: 'both'
         };
-        console.log(this.state.board);
         var field = this.state.board.map(function (item, index) {
             if (((index % 100) == 0) && (index != 0)) {
-                return <div style={cellStyle} id={index} className={item.name}></div>
+                if (item.name == 'player') {
+                    return <div style={cellStyle} id={index} className={item.name}></div>
+                } else {
+                    return <div style={cellStyle} id={index} className={item.name}></div>
+                }
             } else {
-                return <div id={index} className={item.name}></div>
+                if (item.name == 'player') {
+                    return <div id={index} className={item.name}></div>
+                } else {
+                    return <div id={index} className={item.name}></div>
+                }
             }
         });
         return (
@@ -99,6 +128,7 @@ var Board = React.createClass({
         )
     },
     render: function () {
+        window.addEventListener("keydown", this.move);
         return (<div>
                 <div className='grid'>
                     {this.getField()}
