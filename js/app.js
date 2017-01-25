@@ -112,12 +112,21 @@ function playerMove(board, direction) {
         var currentEnemy = ENEMY;
         PLAYER.health -= currentEnemy.demage;
         currentEnemy.health -= PLAYER.demage;
-        if (currentEnemy.health <= 0) {
+        if (PLAYER.health <= 0) {
+            board[player] = EMPTY;
+            PLAYER.exp = 0;
+            PLAYER.level = 0;
+            PLAYER.health = 100;
+            PLAYER.demage = 10;
+            ENEMY.health = 100;
+        } else if (currentEnemy.health <= 0) {
             board[player] = EMPTY;
             ENEMY.health = 100;
             board[player + MOVES[direction]] = PLAYER;
         }
+
     }
+
     return board;
 }
 
@@ -125,19 +134,34 @@ var Board = React.createClass({
     getInitialState: function () {
         return {
             board: newBoard(),
-            player: PLAYER
+            player: PLAYER,
+            win: false,
+            lose: false
         }
     },
     move: function (e) {
-        var newBoard = playerMove(this.state.board, e.code)
-        this.setState({
-            board: newBoard,
-            player: PLAYER
-        })
-
+        var newBoard = playerMove(this.state.board, e.code);
+        if (newBoard.indexOf(PLAYER) == -1) {
+            this.setState({
+                board: newBoard,
+                player: PLAYER,
+                lose: true
+            })
+        } else {
+            this.setState({
+                board: newBoard,
+                player: PLAYER
+            })
+        }
     },
     getField: function () {
         var same = this;
+        if (this.state.lose == true) {
+            this.setState({
+                lose: false,
+                board: newBoard()
+            });
+        }
         window.onKeyPress = this.move;
         const cellStyle = {
             clear: 'both'
@@ -157,12 +181,21 @@ var Board = React.createClass({
                 }
             }
         });
+
         return (
             field
         )
     },
+
     render: function () {
         window.addEventListener("keydown", this.move);
+        if (this.state.lose) {
+            return (<div>
+                    You lose!!!
+                    <button onClick={this.getField}>New game</button>
+                </div>
+            )
+        }
         return (<div>
                 <div className='playerInfo'>
                     <div>Health: {this.state.player.health}</div>
