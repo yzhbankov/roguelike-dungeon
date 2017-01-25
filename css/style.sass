@@ -1,8 +1,37 @@
 .empty
-  background-color: ghostwhite
   width: 10px
   height: 10px
   float: left
+  background-color: ghostwhite
+
+.wall
+  @extend .empty
+  background-color: gray
+
+.weapon
+  @extend .empty
+  background-color: orange
+
+.enemy
+  @extend .empty
+  background-color: red
+
+.boss
+  @extend .empty
+  background-color: #f4ff79
+
+.player
+  @extend .empty
+  background-color: blue
+
+.health
+  @extend .empty
+  background-color: green
+
+.portal
+  @extend .empty
+  background-color: #ae61ff
+
 #box
   width: 1000px
   height: 400px

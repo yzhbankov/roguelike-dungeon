@@ -1,8 +1,29 @@
-.empty {
-  background-color: ghostwhite;
+.empty, .wall, .weapon, .enemy, .boss, .player, .health, .portal {
   width: 10px;
   height: 10px;
-  float: left; }
+  float: left;
+  background-color: ghostwhite; }
+
+.wall {
+  background-color: gray; }
+
+.weapon {
+  background-color: orange; }
+
+.enemy {
+  background-color: red; }
+
+.boss {
+  background-color: #f4ff79; }
+
+.player {
+  background-color: blue; }
+
+.health {
+  background-color: green; }
+
+.portal {
+  background-color: #ae61ff; }
 
 #box {
   width: 1000px;
