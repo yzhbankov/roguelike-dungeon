@@ -21,7 +21,7 @@ var ENEMY = {
     demage: 10
 };
 var BOSS = {
-    name: 'enemy',
+    name: 'boss',
     health: 300,
     demage: 100
 };
@@ -106,7 +106,7 @@ function playerMove(board, direction) {
     if (board[player + MOVES[direction]] == WEAPON) {
         board[player] = EMPTY;
         board[player + MOVES[direction]] = PLAYER;
-        PLAYER.demage += WEAPON.demage;
+        PLAYER.demage += (WEAPON.demage + PLAYER.level * 10);
     }
     if (board[player + MOVES[direction]] == ENEMY) {
         var currentEnemy = ENEMY;
@@ -121,8 +121,32 @@ function playerMove(board, direction) {
             ENEMY.health = 100;
         } else if (currentEnemy.health <= 0) {
             board[player] = EMPTY;
+            PLAYER.exp += 10;
+            PLAYER.level = Math.floor(PLAYER.exp / 45);
             ENEMY.health = 100;
             board[player + MOVES[direction]] = PLAYER;
+        }
+
+    }
+    if (board[player + MOVES[direction]] == BOSS) {
+        PLAYER.health -= BOSS.demage;
+        BOSS.health -= PLAYER.demage;
+        if (PLAYER.health <= 0) {
+            board[player] = EMPTY;
+            PLAYER.exp = 0;
+            PLAYER.level = 0;
+            PLAYER.health = 100;
+            PLAYER.demage = 10;
+            ENEMY.health = 100;
+        } else if (BOSS.health <= 0) {
+            board[player] = EMPTY;
+            BOSS.health = 300;
+            board[player + MOVES[direction]] = PLAYER;
+            PLAYER.exp = 0;
+            PLAYER.level = 0;
+            PLAYER.health = 100;
+            PLAYER.demage = 10;
+            ENEMY.health = 100;
         }
 
     }
@@ -147,7 +171,14 @@ var Board = React.createClass({
                 player: PLAYER,
                 lose: true
             })
-        } else {
+        } else if (newBoard.indexOf(BOSS) == -1) {
+            this.setState({
+                board: newBoard,
+                player: PLAYER,
+                win: true
+            })
+        }
+        else {
             this.setState({
                 board: newBoard,
                 player: PLAYER
@@ -156,9 +187,10 @@ var Board = React.createClass({
     },
     getField: function () {
         var same = this;
-        if (this.state.lose == true) {
+        if ((this.state.lose == true) || (this.state.win == true)) {
             this.setState({
                 lose: false,
+                win: false,
                 board: newBoard()
             });
         }
@@ -195,19 +227,24 @@ var Board = React.createClass({
                     <button onClick={this.getField}>New game</button>
                 </div>
             )
-        }
-        return (<div>
-                <div className='playerInfo'>
-                    <div>Health: {this.state.player.health}</div>
-                    <div>Experience: {this.state.player.exp}</div>
-                    <div>Level: {this.state.player.level}</div>
-                    <div>Weapon: {this.state.player.demage}</div>
+        } else if (this.state.win) {
+            return (<div>
+                You win!!!
+                <button onClick={this.getField}>New game</button>
+            </div>)
+        } else
+            return (<div>
+                    <div className='playerInfo'>
+                        <div>Health: {this.state.player.health}</div>
+                        <div>Experience: {this.state.player.exp}</div>
+                        <div>Level: {this.state.player.level}</div>
+                        <div>Weapon demage: {this.state.player.demage}</div>
+                    </div>
+                    <div className='grid'>
+                        {this.getField()}
+                    </div>
                 </div>
-                <div className='grid'>
-                    {this.getField()}
-                </div>
-            </div>
-        )
+            )
     }
 });
 
