@@ -223,25 +223,53 @@ var Board = React.createClass({
         window.addEventListener("keydown", this.move);
         if (this.state.lose) {
             return (<div>
-                    You lose!!!
+                    <div className='message'>
+                        You lose!!!
+                    </div>
                     <button onClick={this.getField}>New game</button>
                 </div>
             )
         } else if (this.state.win) {
-            return (<div>
+            return (<div className='message'>
                 You win!!!
                 <button onClick={this.getField}>New game</button>
             </div>)
         } else
             return (<div>
-                    <div className='playerInfo'>
-                        <div>Health: {this.state.player.health}</div>
-                        <div>Experience: {this.state.player.exp}</div>
-                        <div>Level: {this.state.player.level}</div>
-                        <div>Weapon demage: {this.state.player.demage}</div>
+                    <div className='container'>
+                        <div className='info'>Health: {this.state.player.health}</div>
+                        <div className='info'>Experience: {this.state.player.exp}</div>
+                        <div className='info'>Level: {this.state.player.level}</div>
+                        <div className='info'>Weapon demage: {this.state.player.demage}</div>
                     </div>
                     <div className='grid'>
                         {this.getField()}
+                    </div>
+                    <div className='entities container'>
+                        <div className='footer'>
+                            <div className='enemy'></div>
+                            <div>- Enemy</div>
+                        </div>
+                        <div className='footer'>
+                            <div className='boss footer'></div>
+                            <div>- Boss</div>
+                        </div>
+                        <div className='footer'>
+                            <div className='health footer'></div>
+                            <div>- Health</div>
+                        </div>
+                        <div className='footer'>
+                            <div className='weapon footer'></div>
+                            <div>- Weapon</div>
+                        </div>
+                        <div className='footer'>
+                            <div className='portal footer'></div>
+                            <div>- Portal</div>
+                        </div>
+                        <div className='footer'>
+                            <div className='player footer'></div>
+                            <div>- You</div>
+                        </div>
                     </div>
                 </div>
             )
