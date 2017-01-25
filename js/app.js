@@ -82,10 +82,22 @@ function newBoard() {
 
 function playerMove(board, direction) {
     var player = board.indexOf(PLAYER);
-    console.log(player);
-    board[player] = EMPTY;
-    board[player + MOVES[direction]] = PLAYER;
-    console.log(player + MOVES[direction]);
+    if ((board[player + MOVES[direction]] == EMPTY) && (board[player + MOVES[direction]]) &&
+        ((player + MOVES[direction]) % 100 != 0)) {
+        board[player] = EMPTY;
+        board[player + MOVES[direction]] = PLAYER;
+    }
+    if ((board[player + MOVES[direction]] == PORTAL)) {
+        var counter = 0;
+        board[player] = EMPTY;
+        while (counter < 1) {
+            var index = Math.floor(Math.random() * 4000);
+            if (board[index] == EMPTY) {
+                counter++;
+                board[index] = PLAYER;
+            }
+        }
+    }
     return board;
 }
 
