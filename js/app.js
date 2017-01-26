@@ -58,6 +58,20 @@ function emptyBoard() {
     return board;
 }
 
+function toggleDarckness(pos) {
+    var indexes = [];
+    var currPos = pos - 3 - 100 * 3;
+    if (currPos < 0) {
+        currPos = 0;
+    }
+    for (var i = 0; i < 7; i++) {
+        for (var j = 0; j < 7; j++) {
+            indexes.push(currPos + j + i * 100);
+        }
+    }
+    return indexes;
+}
+
 function newBoard() {
     var board = emptyBoard();
 
@@ -177,7 +191,8 @@ var Board = React.createClass({
             board: newBoard(),
             player: PLAYER,
             win: false,
-            lose: false
+            lose: false,
+            darckness: true
         }
     },
     move: function (e) {
@@ -215,18 +230,31 @@ var Board = React.createClass({
         const cellStyle = {
             clear: 'both'
         };
+        var playerPos = this.state.board.indexOf(PLAYER);
+        var unToggle = toggleDarckness(playerPos);
+
+        function steClass(item, index) {
+            if ((unToggle.indexOf(index) == -1) && (same.state.darckness)) {
+                return item.name + ' toggle'
+            } else {
+                return item.name
+            }
+        }
+
         var field = this.state.board.map(function (item, index) {
             if (((index % 100) == 0) && (index != 0)) {
                 if (item.name == 'player') {
-                    return <div style={cellStyle} id={index} className={item.name}></div>
+                    playerPos = index;
+                    return <div style={cellStyle} id={index} className={steClass(item,index)}></div>
                 } else {
-                    return <div style={cellStyle} id={index} className={item.name}></div>
+                    return <div style={cellStyle} id={index} className={steClass(item,index)}></div>
                 }
             } else {
                 if (item.name == 'player') {
-                    return <div id={index} className={item.name}></div>
+                    playerPos = index;
+                    return <div id={index} className={steClass(item,index)}></div>
                 } else {
-                    return <div id={index} className={item.name}></div>
+                    return <div id={index} className={steClass(item,index)}></div>
                 }
             }
         });
@@ -234,6 +262,12 @@ var Board = React.createClass({
         return (
             field
         )
+    },
+    toggleDarckness: function () {
+        var darckness = this.state.darckness;
+        this.setState({
+            darckness: !darckness
+        })
     },
 
     render: function () {
@@ -258,6 +292,9 @@ var Board = React.createClass({
                         <div className='info'>Experience: {this.state.player.exp}</div>
                         <div className='info'>Level: {this.state.player.level}</div>
                         <div className='info'>Weapon demage: {this.state.player.demage}</div>
+                        <div className='info'>
+                            <button onClick={this.toggleDarckness}>Toggle Darckness</button>
+                        </div>
                     </div>
                     <div className='grid'>
                         {this.getField()}
