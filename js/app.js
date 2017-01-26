@@ -43,6 +43,12 @@ var MOVES = {
     'ArrowRight': 1
 };
 
+function Enemy(name, demage, health) {
+    this.name = name;
+    this.demage = demage;
+    this.health = health;
+}
+
 function emptyBoard() {
     var board = [];
     for (var i = 0; i < 100; i++)
@@ -59,12 +65,23 @@ function newBoard() {
         board[i] = EMPTY
     }
     function setEntyty(entyty, number) {
-        var counter = 0;
-        while (counter < number) {
-            var index = Math.floor(Math.random() * 4000);
-            if (board[index] == EMPTY) {
-                counter++;
-                board[index] = entyty
+        if (entyty.name == 'enemy') {
+            var counter = 0;
+            while (counter < number) {
+                var index = Math.floor(Math.random() * 4000);
+                if (board[index] == EMPTY) {
+                    counter++;
+                    board[index] = new Enemy('enemy', 10, 100)
+                }
+            }
+        } else {
+            var counter = 0;
+            while (counter < number) {
+                var index = Math.floor(Math.random() * 4000);
+                if (board[index] == EMPTY) {
+                    counter++;
+                    board[index] = entyty
+                }
             }
         }
     }
@@ -108,22 +125,22 @@ function playerMove(board, direction) {
         board[player + MOVES[direction]] = PLAYER;
         PLAYER.demage += (WEAPON.demage + PLAYER.level * 10);
     }
-    if (board[player + MOVES[direction]] == ENEMY) {
-        var currentEnemy = ENEMY;
-        PLAYER.health -= currentEnemy.demage;
-        currentEnemy.health -= PLAYER.demage;
+    if (board[player + MOVES[direction]].name == 'enemy') {
+
+        PLAYER.health -= board[player + MOVES[direction]].demage;
+        board[player + MOVES[direction]].health -= PLAYER.demage;
         if (PLAYER.health <= 0) {
             board[player] = EMPTY;
             PLAYER.exp = 0;
             PLAYER.level = 0;
             PLAYER.health = 100;
             PLAYER.demage = 10;
-            ENEMY.health = 100;
-        } else if (currentEnemy.health <= 0) {
+
+        } else if (board[player + MOVES[direction]].health <= 0) {
             board[player] = EMPTY;
             PLAYER.exp += 10;
             PLAYER.level = Math.floor(PLAYER.exp / 45);
-            ENEMY.health = 100;
+
             board[player + MOVES[direction]] = PLAYER;
         }
 
