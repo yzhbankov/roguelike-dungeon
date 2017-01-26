@@ -137,7 +137,7 @@ function playerMove(board, direction) {
         board[player + MOVES[direction]] = PLAYER;
         PLAYER.demage += (WEAPON.demage + PLAYER.level * 10);
     }
-    if (board[player + MOVES[direction]] == ENEMY) {
+    if (board[player + MOVES[direction]].name == 'enemy') {
 
         PLAYER.health -= board[player + MOVES[direction]].demage;
         board[player + MOVES[direction]].health -= PLAYER.demage;
