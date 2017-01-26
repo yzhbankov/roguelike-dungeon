@@ -61,9 +61,7 @@ function emptyBoard() {
 function toggleDarckness(pos) {
     var indexes = [];
     var currPos = pos - 3 - 100 * 3;
-    if (currPos < 0) {
-        currPos = 0;
-    }
+
     for (var i = 0; i < 7; i++) {
         for (var j = 0; j < 7; j++) {
             indexes.push(currPos + j + i * 100);
@@ -139,7 +137,7 @@ function playerMove(board, direction) {
         board[player + MOVES[direction]] = PLAYER;
         PLAYER.demage += (WEAPON.demage + PLAYER.level * 10);
     }
-    if (board[player + MOVES[direction]].name == 'enemy') {
+    if (board[player + MOVES[direction]] == ENEMY) {
 
         PLAYER.health -= board[player + MOVES[direction]].demage;
         board[player + MOVES[direction]].health -= PLAYER.demage;
@@ -288,41 +286,45 @@ var Board = React.createClass({
         } else
             return (<div>
                     <div className='container'>
-                        <div className='info'>Health: {this.state.player.health}</div>
-                        <div className='info'>Experience: {this.state.player.exp}</div>
-                        <div className='info'>Level: {this.state.player.level}</div>
-                        <div className='info'>Weapon demage: {this.state.player.demage}</div>
-                        <div className='info'>
-                            <button onClick={this.toggleDarckness}>Toggle Darckness</button>
+                        <div className='header'>
+                            <div className='info'>Health: {this.state.player.health}</div>
+                            <div className='info'>Experience: {this.state.player.exp}</div>
+                            <div className='info'>Level: {this.state.player.level}</div>
+                            <div className='info'>Weapon demage: {this.state.player.demage}</div>
+                            <div className='info'>
+                                <button onClick={this.toggleDarckness}>Toggle Darckness</button>
+                            </div>
                         </div>
                     </div>
                     <div className='grid'>
                         {this.getField()}
                     </div>
-                    <div className='entities container'>
-                        <div className='footer'>
-                            <div className='enemy'></div>
-                            <div>- Enemy</div>
-                        </div>
-                        <div className='footer'>
-                            <div className='boss footer'></div>
-                            <div>- Boss</div>
-                        </div>
-                        <div className='footer'>
-                            <div className='health footer'></div>
-                            <div>- Health</div>
-                        </div>
-                        <div className='footer'>
-                            <div className='weapon footer'></div>
-                            <div>- Weapon</div>
-                        </div>
-                        <div className='footer'>
-                            <div className='portal footer'></div>
-                            <div>- Portal</div>
-                        </div>
-                        <div className='footer'>
-                            <div className='player footer'></div>
-                            <div>- You</div>
+                    <div className='container'>
+                        <div className='entities'>
+                            <div className='footer'>
+                                <div className='enemy'></div>
+                                <div>Enemy</div>
+                            </div>
+                            <div className='footer'>
+                                <div className='boss'></div>
+                                <div>Boss</div>
+                            </div>
+                            <div className='footer'>
+                                <div className='health'></div>
+                                <div>Health</div>
+                            </div>
+                            <div className='footer'>
+                                <div className='weapon'></div>
+                                <div>Weapon</div>
+                            </div>
+                            <div className='footer'>
+                                <div className='portal'></div>
+                                <div>Portal</div>
+                            </div>
+                            <div className='footer'>
+                                <div className='player'></div>
+                                <div>You</div>
+                            </div>
                         </div>
                     </div>
                 </div>
