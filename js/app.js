@@ -89,7 +89,7 @@ function roomGeneration() {
         });
     }
 
-    while (roomCollection.length < 10) {
+    while (roomCollection.length < 15) {
         var intersection = false;
         var point = Math.floor(Math.random() * 4000);
         if (point > (4000-10-10*100)){
@@ -111,9 +111,66 @@ function roomGeneration() {
 function newBoard() {
     var board = emptyBoard();
     var rooms = roomGeneration();
-    for (var i = 0; i < rooms.length; i++) {
-        for (var j = 0; j < rooms[i].length; j++) {
-            board[rooms[i][j]] = EMPTY
+
+    function getWay(point1, point2){
+        var coridor = [];
+
+        function getCrossPoint(p1, p2){
+            if (p1 > p2){
+                var temp = p1;
+                p1 = p2;
+                p2 = temp;
+            }
+            var l1 = 100 - (p1%100);
+            var l2 = Math.floor(p2/100);
+            for (var i = 0; i <= l1; i++){
+                for (var j = 0; j <= l2; j++){
+                    if ((p1+i)==(p2-j*100)){
+                        return p1+i
+                    }
+                }
+            }
+            for (var i = 0; i <= (p1%100); i--){
+                for (var j = 0; j <= l2; j++){
+                    if ((p1+i)==(p2-j*100)){
+                        return p1+i
+                    }
+                }
+            }
+        }
+
+        function getCoridor(p1, p2){
+            var crossPoint = getCrossPoint(p1, p2)
+            coridor.push(crossPoint);
+            if (p1 > p2){
+                var temp = p1;
+                p1 = p2;
+                p2 = temp;
+            }
+            if (crossPoint<p1){
+                for (var j = 0; j < p1 - crossPoint; j++)
+                    coridor.push(p1-j);
+            } else {
+                for (var j = 0; j < crossPoint - p1; j++)
+                    coridor.push(p1+j)
+            }
+            for (var i = 0; i <((p2 - crossPoint)/100); i++ )
+                coridor.push(p2-i*100)
+        }
+
+        getCoridor(point1, point2);
+
+        return coridor
+    }
+    var coridors = [];
+    for (var i = 0; i < rooms.length-1; i++){
+        coridors.push(getWay(rooms[i][0], rooms[i+1][0]));
+    }
+    var roomsWithCoridors = rooms.concat(coridors);
+
+    for (var i = 0; i < roomsWithCoridors.length; i++) {
+        for (var j = 0; j < roomsWithCoridors[i].length; j++) {
+            board[roomsWithCoridors[i][j]] = EMPTY
         }
     }
     function setEntyty(entyty, number) {
