@@ -88,7 +88,18 @@ function roomGeneration() {
             return right.indexOf(el) != -1;
         });
     }
+    function doseWall(arr){
+        var width = Math.sqrt(arr.length);
+        var index = Math.floor(arr[0]/100);
 
+        for (var i = 0; i < width; i++){
+
+            if (Math.floor(((arr[i*width])/100))!=index){
+                return true;
+            }
+        }
+        return false;
+    }
     while (roomCollection.length < 15) {
         var intersection = false;
         var point = Math.floor(Math.random() * 4000);
@@ -97,7 +108,7 @@ function roomGeneration() {
         }
         var tempRoom = room(point, 10, 10);
         for (var i = 0; i < roomCollection.length; i++) {
-            if ((intersect(tempRoom, roomCollection[i])).length) {
+            if (((intersect(tempRoom, roomCollection[i])).length)||(doseWall(tempRoom))) {
                 intersection = true;
             }
         }
