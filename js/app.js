@@ -70,11 +70,48 @@ function toggleDarckness(pos) {
     return indexes;
 }
 
+function roomGeneration() {
+    var roomCollection = [];
+
+    function room(point, x, y) {
+        var indexes = [];
+        for (var i = 0; i < x; i++) {
+            for (var j = 0; j < y; j++) {
+                indexes.push(point + i + j * 100);
+            }
+        }
+        return indexes;
+    }
+
+    function intersect(left, right) {
+        return left.filter(function (el) {
+            return right.indexOf(el) != -1;
+        });
+    }
+
+    while (roomCollection.length < 10) {
+        var intersection = false;
+        var point = Math.floor(Math.random() * 4000);
+        var tempRoom = room(point, 10, 10);
+        for (var i = 0; i < roomCollection.length; i++) {
+            if ((intersect(tempRoom, roomCollection[i])).length) {
+                intersection = true;
+            }
+        }
+        if (!intersection) {
+            roomCollection.push(tempRoom);
+        }
+    }
+    return roomCollection;
+}
+
 function newBoard() {
     var board = emptyBoard();
-
-    for (var i = 0; i < board.length; i++) {
-        board[i] = EMPTY
+    var rooms = roomGeneration();
+    for (var i = 0; i < rooms.length; i++) {
+        for (var j = 0; j < rooms[i].length; j++) {
+            board[rooms[i][j]] = EMPTY
+        }
     }
     function setEntyty(entyty, number) {
         if (entyty.name == 'enemy') {
@@ -98,14 +135,20 @@ function newBoard() {
         }
     }
 
+    function setWall() {
+        for (var i = 0; i < board.length; i++) {
+            if (!board[i]) board[i] = WALL;
+        }
+    }
+
     setEntyty(ENEMY, 10);
     setEntyty(PLAYER, 1);
     setEntyty(BOSS, 1);
     setEntyty(HEALTH, 20);
     setEntyty(WEAPON, 10);
-    setEntyty(WALL, 500);
     setEntyty(PORTAL, 3);
-
+    setWall();
+    
     return board;
 }
 
