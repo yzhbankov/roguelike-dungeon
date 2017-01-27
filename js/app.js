@@ -311,6 +311,7 @@ var Board = React.createClass({
         }
     },
     move: function (e) {
+
         var newBoard = playerMove(this.state.board, e.code);
         if (newBoard.indexOf(PLAYER) == -1) {
             this.setState({
@@ -341,7 +342,7 @@ var Board = React.createClass({
                 board: newBoard()
             });
         }
-        window.onKeyPress = this.move;
+
         const cellStyle = {
             clear: 'both'
         };
