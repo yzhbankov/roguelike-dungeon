@@ -92,6 +92,9 @@ function roomGeneration() {
     while (roomCollection.length < 10) {
         var intersection = false;
         var point = Math.floor(Math.random() * 4000);
+        if (point > (4000-10-10*100)){
+            point = 4000-10-10*100;
+        }
         var tempRoom = room(point, 10, 10);
         for (var i = 0; i < roomCollection.length; i++) {
             if ((intersect(tempRoom, roomCollection[i])).length) {
@@ -148,7 +151,7 @@ function newBoard() {
     setEntyty(WEAPON, 10);
     setEntyty(PORTAL, 3);
     setWall();
-    
+
     return board;
 }
 
