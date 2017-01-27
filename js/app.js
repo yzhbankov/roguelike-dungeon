@@ -332,6 +332,7 @@ var Board = React.createClass({
                 player: PLAYER
             })
         }
+
     },
     getField: function () {
         var same = this;
@@ -387,6 +388,7 @@ var Board = React.createClass({
     },
 
     render: function () {
+        var same = this;
         window.addEventListener("keydown", this.move);
         if (this.state.lose) {
             return (<div>
