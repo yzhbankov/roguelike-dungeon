@@ -88,27 +88,29 @@ function roomGeneration() {
             return right.indexOf(el) != -1;
         });
     }
-    function doseWall(arr){
+
+    function doseWall(arr) {
         var width = Math.sqrt(arr.length);
-        var index = Math.floor(arr[0]/100);
+        var index = Math.floor(arr[0] / 100);
 
-        for (var i = 0; i < width; i++){
+        for (var i = 0; i < width; i++) {
 
-            if (Math.floor(((arr[i*width])/100))!=index){
+            if (Math.floor(((arr[i * width]) / 100)) != index) {
                 return true;
             }
         }
         return false;
     }
+
     while (roomCollection.length < 15) {
         var intersection = false;
         var point = Math.floor(Math.random() * 4000);
-        if (point > (4000-10-10*100)){
-            point = 4000-10-10*100;
+        if (point > (4000 - 10 - 10 * 100)) {
+            point = 4000 - 10 - 10 * 100;
         }
         var tempRoom = room(point, 10, 10);
         for (var i = 0; i < roomCollection.length; i++) {
-            if (((intersect(tempRoom, roomCollection[i])).length)||(doseWall(tempRoom))) {
+            if (((intersect(tempRoom, roomCollection[i])).length) || (doseWall(tempRoom))) {
                 intersection = true;
             }
         }
@@ -123,59 +125,60 @@ function newBoard() {
     var board = emptyBoard();
     var rooms = roomGeneration();
 
-    function getWay(point1, point2){
+    function getWay(point1, point2) {
         var coridor = [];
 
-        function getCrossPoint(p1, p2){
-            if (p1 > p2){
+        function getCrossPoint(p1, p2) {
+            if (p1 > p2) {
                 var temp = p1;
                 p1 = p2;
                 p2 = temp;
             }
-            var l1 = 100 - (p1%100);
-            var l2 = Math.floor(p2/100);
-            for (var i = 0; i <= l1; i++){
-                for (var j = 0; j <= l2; j++){
-                    if ((p1+i)==(p2-j*100)){
-                        return p1+i
+            var l1 = 100 - (p1 % 100);
+            var l2 = Math.floor(p2 / 100);
+            for (var i = 0; i <= l1; i++) {
+                for (var j = 0; j <= l2; j++) {
+                    if ((p1 + i) == (p2 - j * 100)) {
+                        return p1 + i
                     }
                 }
             }
-            for (var i = 0; i <= (p1%100); i--){
-                for (var j = 0; j <= l2; j++){
-                    if ((p1+i)==(p2-j*100)){
-                        return p1+i
+            for (var i = 0; i <= (p1 % 100); i--) {
+                for (var j = 0; j <= l2; j++) {
+                    if ((p1 + i) == (p2 - j * 100)) {
+                        return p1 + i
                     }
                 }
             }
         }
 
-        function getCoridor(p1, p2){
+        function getCoridor(p1, p2) {
             var crossPoint = getCrossPoint(p1, p2)
             coridor.push(crossPoint);
-            if (p1 > p2){
+            if (p1 > p2) {
                 var temp = p1;
                 p1 = p2;
                 p2 = temp;
             }
-            if (crossPoint<p1){
+            if (crossPoint < p1) {
                 for (var j = 0; j < p1 - crossPoint; j++)
-                    coridor.push(p1-j);
+                    coridor.push(p1 - j);
             } else {
                 for (var j = 0; j < crossPoint - p1; j++)
-                    coridor.push(p1+j)
+                    coridor.push(p1 + j)
             }
-            for (var i = 0; i <((p2 - crossPoint)/100); i++ )
-                coridor.push(p2-i*100)
+            for (var i = 0; i < ((p2 - crossPoint) / 100); i++)
+                coridor.push(p2 - i * 100)
         }
 
         getCoridor(point1, point2);
 
         return coridor
     }
+
     var coridors = [];
-    for (var i = 0; i < rooms.length-1; i++){
-        coridors.push(getWay(rooms[i][0], rooms[i+1][0]));
+    for (var i = 0; i < rooms.length - 1; i++) {
+        coridors.push(getWay(rooms[i][0], rooms[i + 1][0]));
     }
     var roomsWithCoridors = rooms.concat(coridors);
 
